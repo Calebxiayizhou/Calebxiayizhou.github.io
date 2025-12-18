@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>圣诞快乐，爱你宝宝</title>
+    <title>圣诞快乐</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
     <style>
         * {
@@ -71,6 +71,71 @@
         .text-loading {
             font-size: 2rem;
         }
+
+        /* 添加圣诞文字样式 */
+        .christmas-text {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            pointer-events: none;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            text-shadow: 0 0 20px rgba(197, 168, 128, 0.8),
+                         0 0 40px rgba(255, 50, 50, 0.6),
+                         0 0 60px rgba(255, 50, 50, 0.4);
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+
+        .merry-christmas {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: #f1d4d4;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #9ddfd3;
+            font-style: italic;
+            letter-spacing: 2px;
+        }
+
+        /* 添加发光动画效果 */
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 20px rgba(197, 168, 128, 0.8),
+                             0 0 40px rgba(255, 50, 50, 0.6),
+                             0 0 60px rgba(255, 50, 50, 0.4);
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 30px rgba(255, 215, 0, 0.9),
+                             0 0 60px rgba(255, 100, 100, 0.8),
+                             0 0 90px rgba(255, 100, 100, 0.6),
+                             0 0 120px rgba(255, 100, 100, 0.4);
+                transform: scale(1.02);
+            }
+        }
+
+        /* 添加雪花飘落效果 */
+        .snowflake {
+            position: absolute;
+            color: #f1f6f9;
+            font-size: 1.5rem;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            z-index: 99;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
     </style>
     <script>
         window.console = window.console || function (t) { };
@@ -78,6 +143,15 @@
 </head>
 
 <body translate="no">
+    <!-- 添加圣诞文字 -->
+    <div class="christmas-text">
+        <div class="merry-christmas">Merry Christmas</div>
+        <div class="subtitle">May your holidays sparkle with joy</div>
+    </div>
+
+    <!-- 添加动态雪花效果 -->
+    <div id="snowflakes-container"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/postprocessing/EffectComposer.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.115.0/examples/js/postprocessing/RenderPass.js"></script>
@@ -91,12 +165,12 @@
             <li class="title">请选择音乐</li>
             <li>
                 <button id="btnA" class="btn" type="button">
-                    Snowflakes Falling Down by Simon Panrucker
+                    EXO - 첫 눈 (First Snow)
                 </button>
             </li>
-            <li><button id="btnB" class="btn" type="button">This Christmas by Dott</button></li>
-            <li><button id="btnC" class="btn" type="button">No room at the inn by TRG Banks</button></li>
-            <li><button id="btnD" class="btn" type="button">Jingle Bell Swing by Mark Smeby</button></li>
+            <li><button id="btnB" class="btn" type="button">Sia - Snowman</button></li>
+            <li><button id="btnC" class="btn" type="button">Mariah Carey - All I Want for Christmas Is You</button></li>
+            <li><button id="btnD" class="btn" type="button">Taylor Swift - Last Christmas</button></li>
             <li class="separator">或者</li>
             <li>
                 <input type="file" id="upload" hidden />
@@ -106,6 +180,27 @@
     </div>
 
     <script>
+        // 创建动态雪花效果
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes-container');
+            const snowflakes = ['❄', '❅', '❆', '✻', '✼'];
+
+            for (let i = 0; i < 30; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.textContent = snowflakes[Math.floor(Math.random() * snowflakes.length)];
+                snowflake.style.left = Math.random() * 100 + 'vw';
+                snowflake.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+                snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+                snowflake.style.animationDuration = (Math.random() * 8 + 8) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(snowflake);
+            }
+        }
+
+        // 在页面加载时创建雪花
+        document.addEventListener('DOMContentLoaded', createSnowflakes);
+
         const { PI, sin, cos } = Math;
         const TAU = 2 * PI;
 
@@ -218,10 +313,10 @@
             document.getElementById("overlay").innerHTML =
                 '<div class="text-loading">正在下载音乐，请稍等...</div>';
             const files = [
-                "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Simon_Panrucker/Happy_Christmas_You_Guys/Simon_Panrucker_-_01_-_Snowflakes_Falling_Down.mp3",
-                "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Dott/This_Christmas/Dott_-_01_-_This_Christmas.mp3",
-                "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/TRG_Banks/TRG_Banks_Christmas_Album/TRG_Banks_-_12_-_No_room_at_the_inn.mp3",
-                "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Mark_Smeby/En_attendant_Nol/Mark_Smeby_-_07_-_Jingle_Bell_Swing.mp3"
+                "https://raw.githubusercontent.com/Calebxiayizhou/Caleb.index.html/refs/heads/main/EXO%20-%20%EC%B2%AB%20%EB%88%88.mp3",
+                "https://raw.githubusercontent.com/Calebxiayizhou/mary.github.io/refs/heads/main/Sia%20-%20Snowman.mp3",
+                "https://raw.githubusercontent.com/Calebxiayizhou/mary.github.io/refs/heads/main/Mariah%20Carey%20-%20All%20I%20Want%20for%20Christmas%20Is%20You.mp3",
+                "https://raw.githubusercontent.com/Calebxiayizhou/mary.github.io/refs/heads/main/Taylor%20Swift%20-%20Last%20Christmas.mp3"
             ];
 
             const file = files[i];
